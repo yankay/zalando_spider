@@ -27,12 +27,12 @@ class DmozSpider(Spider):
                 return True
 
     def proc_category(self,response):
-        def is_final_page(response):
-            return True
-        reqs = []
-        if not is_final_page(response):
-            pass
         sel = Selector(response)
+        reqs = []
+        for item in set(sel.xpath("//div[@class='pages']//a[.='>']/@href").extract()):
+            if not item.startswith("http"):
+                url = "http://www.zalando.co.uk" + item
+                reqs.append(Request(url, callback=self.parse))
         for item in sel.xpath("//a[@class='productBox']/@href").extract():
             url = item
             if not item.startswith("http"):
