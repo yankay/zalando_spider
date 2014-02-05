@@ -15,6 +15,10 @@ HTTPCACHE_ENABLED=True
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'zalando_spider (+http://www.yourdomain.com)'
 
+CONCURRENT_REQUESTS = 128
+CONCURRENT_REQUESTS_PER_DOMAIN = 128
+CONCURRENT_ITEMS = 200
+
 START_URLS = [
   "http://www.zalando.co.uk/esprit-online-shop/"
 ]

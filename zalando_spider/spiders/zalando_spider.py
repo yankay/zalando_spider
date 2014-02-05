@@ -18,10 +18,12 @@ class DmozSpider(Spider):
     def page_type(self,response):
         sel = Selector(response)
         ilt_top_classes = sel.xpath("//div[@id='ilt_top']/@class").extract()
+        l = []
         for ilt_top_class in ilt_top_classes:
             for t in ilt_top_class.split(" "):
                 if "PAGETYPE-CATALOG" in t:
-                    yield t
+                    l.append(t)
+        return l
 
     def is_category(self,response):
         for t in self.page_type(response):
@@ -30,18 +32,16 @@ class DmozSpider(Spider):
 
     def proc_category(self,response):
         sel = Selector(response)
-        reqs = []
         for item in set(sel.xpath("//div[@class='pages']//a[.='>']/@href").extract()):
             url = item
             if not item.startswith("http"):
                 url = "http://www.zalando.co.uk/" + item
-                reqs.append(Request(url, callback=self.parse))
+                yield Request(url, callback=self.parse)
         for item in sel.xpath("//a[@class='productBox']/@href").extract():
             url = item
             if not item.startswith("http"):
                 url = "http://www.zalando.co.uk" + item
-                reqs.append(Request(url, callback=self.parse))
-        return reqs
+                yield Request(url, callback=self.parse)
 
     def is_item(self,response):
         for t in self.page_type(response):
@@ -62,6 +62,6 @@ class DmozSpider(Spider):
 
     def parse(self, response):
         if self.is_category(response):
-            return self.proc_category(response)
+            yield self.proc_category(response)
         if self.is_item(response):
-            return self.proc_item(response)
+            yield self.proc_item(response)
