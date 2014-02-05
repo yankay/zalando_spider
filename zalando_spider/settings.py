@@ -11,6 +11,7 @@ BOT_NAME = 'zalando_spider'
 SPIDER_MODULES = ['zalando_spider.spiders']
 NEWSPIDER_MODULE = 'zalando_spider.spiders'
 
+HTTPCACHE_ENABLED=True
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'zalando_spider (+http://www.yourdomain.com)'
 

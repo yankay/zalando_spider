@@ -46,6 +46,7 @@ class DmozSpider(Spider):
                 return True
 
     def proc_item(self,response):
+        sel = Selector(response)
         item = PorductItem() 
         item['req_url'] = response.url
         item['brand'] = sel.xpath("//div[@class='productInfos']/h1[@class='productName']/span[@itemprop='brand']/text()").extract()
@@ -56,4 +57,4 @@ class DmozSpider(Spider):
         if self.is_category(response):
             return self.proc_category(response)
         if self.is_item(response):
-            return self.proc_item()
+            return self.proc_item(response)
