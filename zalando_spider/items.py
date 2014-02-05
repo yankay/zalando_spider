@@ -12,5 +12,7 @@ class PorductItem(Item):
     brand = Field()
     category = Field()
     price = Field()
+    old_price = Field()
+    new_price = Field()
     color = Field()
     size = Field()
