@@ -30,8 +30,9 @@ class DmozSpider(Spider):
         sel = Selector(response)
         reqs = []
         for item in set(sel.xpath("//div[@class='pages']//a[.='>']/@href").extract()):
+            url = item
             if not item.startswith("http"):
-                url = "http://www.zalando.co.uk" + item
+                url = "http://www.zalando.co.uk/" + item
                 reqs.append(Request(url, callback=self.parse))
         for item in sel.xpath("//a[@class='productBox']/@href").extract():
             url = item
