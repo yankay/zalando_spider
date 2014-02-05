@@ -57,7 +57,7 @@ class DmozSpider(Spider):
         item['category'] = sel.xpath("//div[@class='breadcrumbs']//ul//a//text()").extract()[3:]
         item['price'] = sel.xpath("//span[@itemprop='price']/text()").extract()
         item['old_price'] = sel.xpath("//span[@id='articleOldPrice']/text()").extract()
-        item['new_price'] = sel.xpath("//span[@itemprop='articlePrice']/text()").extract()
+        item['new_price'] = sel.xpath("//span[@id='articlePrice']/text()").extract()
         item['color'] = sel.xpath("//ul[@class='colorList left']//img/@title").extract()
         item['size'] = map(string.strip,sel.xpath("//ul[@id='listProductSizes']/li/text()").extract())
         return item
