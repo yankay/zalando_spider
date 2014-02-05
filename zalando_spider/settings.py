@@ -13,3 +13,7 @@ NEWSPIDER_MODULE = 'zalando_spider.spiders'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'zalando_spider (+http://www.yourdomain.com)'
+
+START_URLS = [
+  "http://www.zalando.co.uk/esprit-online-shop/"
+]

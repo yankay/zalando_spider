@@ -5,7 +5,8 @@
 
 from scrapy.item import Item, Field
 
-class ZalandoSpiderItem(Item):
+class PorductItem(Item):
     # define the fields for your item here like:
-    # name = Field()
-    pass
+    req_url = Field()
+    name = Field()
+    brand = Field()
