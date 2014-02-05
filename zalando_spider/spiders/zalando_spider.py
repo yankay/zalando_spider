@@ -62,6 +62,6 @@ class DmozSpider(Spider):
 
     def parse(self, response):
         if self.is_category(response):
-            yield self.proc_category(response)
+            return self.proc_category(response)
         if self.is_item(response):
-            yield self.proc_item(response)
+            return self.proc_item(response)
