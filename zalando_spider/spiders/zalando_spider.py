@@ -1,5 +1,7 @@
 from __future__ import  absolute_import
 
+import string
+
 from scrapy.spider import Spider
 from scrapy.selector import Selector
 from scrapy.http import Request
@@ -52,6 +54,10 @@ class DmozSpider(Spider):
         item['req_url'] = response.url
         item['brand'] = sel.xpath("//div[@class='productInfos']/h1[@class='productName']/span[@itemprop='brand']/text()").extract()
         item['name'] = sel.xpath("//div[@class='productInfos']/h1[@class='productName']/span[@itemprop='name']/text()").extract()
+        item['category'] = sel.xpath("//div[@class='breadcrumbs']//ul//a//text()").extract()[3:]
+        item['price'] = sel.xpath("//span[@itemprop='price']/text()").extract()
+        item['color'] = sel.xpath("//ul[@class='colorList left']//img/@title").extract()
+        item['size'] = map(string.strip,sel.xpath("//ul[@id='listProductSizes']/li/text()").extract())
         return item
 
     def parse(self, response):

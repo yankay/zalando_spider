@@ -10,3 +10,7 @@ class PorductItem(Item):
     req_url = Field()
     name = Field()
     brand = Field()
+    category = Field()
+    price = Field()
+    color = Field()
+    size = Field()
