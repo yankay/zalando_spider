@@ -8,6 +8,12 @@ Install
 
 [Install Guild](http://doc.scrapy.org/en/latest/intro/install.html)
 
+In Ubuntu
+```
+sudo apt-get install python-pip build-essential libxml2-dev libxslt1-dev
+sudo pip install Scrapy
+```
+
 ### Clone Code
 
 ```
