@@ -62,7 +62,7 @@ class DmozSpider(Spider):
         item['size'] = map(string.strip,sel.xpath("//ul[@id='listProductSizes']/li/text()").extract())
         item['images'] = sel.xpath("//ul[@id='moreImagesList']//img/@src").extract()
         item['large_images'] =map( lambda s: s.replace('selector','large'), item['images'] )
-        item['details'] = sel.xpath("//div[@id='productDetails']//ul//li/text()").extract()
+        item['details'] = sel.xpath("//div[@id='productDetails']//ul//li//text()").extract()
         return item
 
     def parse(self, response):
