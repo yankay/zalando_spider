@@ -63,6 +63,8 @@ class DmozSpider(Spider):
         item['images'] = sel.xpath("//ul[@id='moreImagesList']//img/@src").extract()
         item['large_images'] =map( lambda s: s.replace('selector','large'), item['images'] )
         item['details'] =map(lambda s: " ".join(map(string.strip,s.xpath('.//text()').extract())), sel.xpath("//div[@id='productDetails']//ul//li"))
+        if len[item['price']] == 0:
+            item['price']=item['new_price']
         return item
 
     def parse(self, response):
