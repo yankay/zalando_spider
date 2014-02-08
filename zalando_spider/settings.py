@@ -20,5 +20,9 @@ CONCURRENT_REQUESTS_PER_DOMAIN = 128
 CONCURRENT_ITEMS = 200
 
 START_URLS = [
-  "http://www.zalando.co.uk/esprit-online-shop/"
+  "http://www.zalando.co.uk/esprit-online-shop/",
+  "http://www.zalando.co.uk/marc-o-polo/"
+  "http://www.zalando.co.uk/tom-tailor-online-shop/",
+  "http://www.zalando.co.uk/s-oliver-online-shop/",
+  "http://www.zalando.co.uk/benetton/"
 ]

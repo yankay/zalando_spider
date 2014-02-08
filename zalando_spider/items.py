@@ -16,3 +16,6 @@ class PorductItem(Item):
     new_price = Field()
     color = Field()
     size = Field()
+    images = Field()
+    large_images = Field()
+    details = Field()
