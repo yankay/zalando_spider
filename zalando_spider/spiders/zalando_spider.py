@@ -55,14 +55,11 @@ class DmozSpider(Spider):
         item['brand'] = sel.xpath("//div[@class='productInfos']/h1[@class='productName']/span[@itemprop='brand']/text()").extract()
         item['name'] = sel.xpath("//div[@class='productInfos']/h1[@class='productName']/span[@itemprop='name']/text()").extract()
         item['category'] = sel.xpath("//div[@class='breadcrumbs']//ul//a//text()").extract()[3:]
-        price = sel.xpath("//span[@itemprop='price']/text()").extract()
+        item['price'] = sel.xpath("//span[@itemprop='price']/text()").extract()
         item['old_price'] = sel.xpath("//span[@id='articleOldPrice']/text()").extract()
-        new_price = sel.xpath("//span[@id='articlePrice']/text()").extract()
-        item['new_price'] = new_price
-        if len[price] == 0:
-            item['price'] = new_price
-        else:
-            item['price'] = price
+        item['new_price'] = sel.xpath("//span[@id='articlePrice']/text()").extract()
+        if len(item['price']) == 0:
+            item['price'] = item['new_price']
         item['color'] = sel.xpath("//ul[@class='colorList left']//img/@title").extract()
         item['size'] = map(string.strip,sel.xpath("//ul[@id='listProductSizes']/li/text()").extract())
         item['images'] = sel.xpath("//ul[@id='moreImagesList']//img/@src").extract()
