@@ -59,7 +59,7 @@ class DmozSpider(Spider):
         item['old_price'] = sel.xpath("//span[@id='articleOldPrice']/text()").extract()
         new_price = sel.xpath("//span[@id='articlePrice']/text()").extract()
         item['new_price'] = new_price
-        if price == 0:
+        if len[price] == 0:
             item['price'] = new_price
         else:
             item['price'] = price
