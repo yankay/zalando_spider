@@ -10,11 +10,11 @@ from scrapy.http import Request
 from zalando_spider.items import PorductItem
 from zalando_spider import settings
 
-class DmozSpider(Spider):
-    url_requested = Set()
+url_requested = Set()
+basic_url = "http://www.zalando.co.uk/"
 
+class DmozSpider(Spider):
     name = "zalando"
-    basic_url = "http://www.zalando.co.uk/"
 
     allowed_domains = ["www.zalando.co.uk"]
     start_urls = settings.START_URLS
@@ -79,7 +79,7 @@ class DmozSpider(Spider):
             if url not in url_requested:
                 url_requested.add(url)
                 yield Request(url, callback=self.parse)
-                
+
         yield item
 
     def parse(self, response):
