@@ -14,6 +14,7 @@ class DmozSpider(Spider):
     url_requested = Set()
 
     name = "zalando"
+    basic_url = "http://www.zalando.co.uk/"
 
     allowed_domains = ["www.zalando.co.uk"]
     start_urls = settings.START_URLS
@@ -38,14 +39,14 @@ class DmozSpider(Spider):
         for item in set(sel.xpath("//div[@class='pages']//a[.='>']/@href").extract()):
             url = item
             if not item.startswith("http"):
-                url = "http://www.zalando.co.uk/" + item
+                url = basic_url + item
                 if url not in url_requested:
                     url_requested.add(url)
                     yield Request(url, callback=self.parse)
         for item in sel.xpath("//a[@class='productBox']/@href").extract():
             url = item
             if not item.startswith("http"):
-                url = "http://www.zalando.co.uk" + item
+                url = basic_url + item
                 if url not in url_requested:
                     url_requested.add(url)
                     yield Request(url, callback=self.parse)
@@ -67,13 +68,19 @@ class DmozSpider(Spider):
         item['new_price'] = sel.xpath("//span[@id='articlePrice']/text()").extract()
         if len(item['price']) == 0:
             item['price'] = item['new_price']
-        item['color_available'] = sel.xpath("//ul[@class='colorList left']//img/@title").extract()
+        item['color_available'] = sel.xpath("//ul[@class='colorList']//img/@title").extract()  
         item['size'] = map(string.strip,sel.xpath("//ul[@id='listProductSizes']/li/text()").extract())
         item['images'] = sel.xpath("//ul[@id='moreImagesList']//img/@src").extract()
         item['large_images'] =map( lambda s: s.replace('selector','large'), item['images'] )
         item['details'] =map(lambda s: " ".join(map(string.strip,s.xpath('.//text()').extract())), sel.xpath("//div[@id='productDetails']//ul//li"))
 
-        return item
+        for item in sel.xpath("//ul[@class='colorList']//a/@href").extract():
+            url = basic_url + item
+            if url not in url_requested:
+                url_requested.add(url)
+                yield Request(url, callback=self.parse)
+                
+        yield item
 
     def parse(self, response):
         if self.is_category(response):
