@@ -1,6 +1,7 @@
 from __future__ import  absolute_import
 
 import string
+from sets import Set
 
 from scrapy.spider import Spider
 from scrapy.selector import Selector
@@ -10,6 +11,8 @@ from zalando_spider.items import PorductItem
 from zalando_spider import settings
 
 class DmozSpider(Spider):
+    url_requested = Set()
+
     name = "zalando"
 
     allowed_domains = ["www.zalando.co.uk"]
@@ -36,12 +39,16 @@ class DmozSpider(Spider):
             url = item
             if not item.startswith("http"):
                 url = "http://www.zalando.co.uk/" + item
-                yield Request(url, callback=self.parse)
+                if url not in url_requested:
+                    url_requested.add(url)
+                    yield Request(url, callback=self.parse)
         for item in sel.xpath("//a[@class='productBox']/@href").extract():
             url = item
             if not item.startswith("http"):
                 url = "http://www.zalando.co.uk" + item
-                yield Request(url, callback=self.parse)
+                if url not in url_requested:
+                    url_requested.add(url)
+                    yield Request(url, callback=self.parse)
 
     def is_item(self,response):
         for t in self.page_type(response):
@@ -60,7 +67,7 @@ class DmozSpider(Spider):
         item['new_price'] = sel.xpath("//span[@id='articlePrice']/text()").extract()
         if len(item['price']) == 0:
             item['price'] = item['new_price']
-        item['color'] = sel.xpath("//ul[@class='colorList left']//img/@title").extract()
+        item['color_available'] = sel.xpath("//ul[@class='colorList left']//img/@title").extract()
         item['size'] = map(string.strip,sel.xpath("//ul[@id='listProductSizes']/li/text()").extract())
         item['images'] = sel.xpath("//ul[@id='moreImagesList']//img/@src").extract()
         item['large_images'] =map( lambda s: s.replace('selector','large'), item['images'] )
