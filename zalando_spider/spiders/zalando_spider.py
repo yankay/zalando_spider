@@ -38,20 +38,22 @@ class DmozSpider(Spider):
 
     def proc_category(self,response):
         sel = Selector(response)
+        l = []
         for item in set(sel.xpath("//div[@class='pages']//a[.='>']/@href").extract()):
             url = item
             if not item.startswith("http"):
                 url = basic_url + item
                 if url not in url_requested:
                     url_requested.add(url)
-                    yield Request(url, callback=self.parse)
+                    l.append(Request(url, callback=self.parse))
         for item in sel.xpath("//a[@class='productBox']/@href").extract():
             url = item
             if not item.startswith("http"):
                 url = basic_url + item
                 if url not in url_requested:
                     url_requested.add(url)
-                    yield Request(url, callback=self.parse)
+                    l.append(Request(url, callback=self.parse))
+        return l
 
     def is_item(self,response):
         for t in self.page_type(response):
@@ -59,6 +61,8 @@ class DmozSpider(Spider):
                 return True
 
     def proc_item(self,response):
+        l = []
+
         sel = Selector(response)
         item = PorductItem() 
         item['req_url'] = response.url
@@ -75,14 +79,15 @@ class DmozSpider(Spider):
         item['images'] = sel.xpath("//ul[@id='moreImagesList']//img/@src").extract()
         item['large_images'] =map( lambda s: s.replace('selector','large'), item['images'] )
         item['details'] =map(lambda s: " ".join(map(string.strip,s.xpath('.//text()').extract())), sel.xpath("//div[@id='productDetails']//ul//li"))
+        l.append(item)
 
         for item in sel.xpath("//ul[@class='colorList']//a/@href").extract():
             url = basic_url + item
             if url not in url_requested:
                 url_requested.add(url)
-                yield Request(url, callback=self.parse)
+                l.append(Request(url, callback=self.parse))
 
-        yield item
+        return l
 
     def parse(self, response):
         if self.is_category(response):
