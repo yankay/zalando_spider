@@ -33,6 +33,8 @@ class DmozSpider(Spider):
         for t in self.page_type(response):
             if "PAGETYPE-CATALOG_SEARCH" in t:
                 return True
+            if "PAGETYPE-CATALOG_CATEGORY" in t:
+                return True
 
     def proc_category(self,response):
         sel = Selector(response)
